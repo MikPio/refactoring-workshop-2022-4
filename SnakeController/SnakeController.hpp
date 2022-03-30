@@ -7,6 +7,8 @@
 
 #include "IEventHandler.hpp"
 #include "SnakeInterface.hpp"
+#include "SnakeSegments.hpp"
+
 
 class Event;
 class IPort;
@@ -25,6 +27,9 @@ struct UnexpectedEventException : std::runtime_error
 
 class Controller : public IEventHandler
 {
+
+    
+
 public:
     Controller(IPort& p_displayPort, IPort& p_foodPort, IPort& p_scorePort, std::string const& p_config);
 
@@ -41,13 +46,9 @@ private:
     std::pair<int, int> m_mapDimension;
     std::pair<int, int> m_foodPosition;
 
-    struct Segment
-    {
-        int x;
-        int y;
-    };
+   
 
-    std::list<Segment> m_segments;
+    SnakeSegments snake_segments;
     Direction m_currentDirection;
 
     void handleTimeoutInd();
@@ -56,12 +57,7 @@ private:
     void handleFoodResp(std::unique_ptr<Event>);
     void handlePauseInd(std::unique_ptr<Event>);
 
-    bool isSegmentAtPosition(int x, int y) const;
-    Segment calculateNewHead() const;
-    void updateSegmentsIfSuccessfullMove(Segment const& newHead);
-    void addHeadSegment(Segment const& newHead);
-    void removeTailSegmentIfNotScored(Segment const& newHead);
-    void removeTailSegment();
+    
 
     bool isPositionOutsideMap(int x, int y) const;
 
